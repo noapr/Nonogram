@@ -1,0 +1,36 @@
+from enum import Enum
+
+from exception import AlreadyMarkedError
+
+
+class Mark(Enum):
+    BLACK = 1
+    WHITE = 0
+
+
+class Puzzle:
+    def __init__(self, num_rows, num_columns):
+        if num_rows < 0 or num_columns < 0:
+            raise IndexError
+
+        self.num_rows = num_rows
+        self.num_columns = num_columns
+        self.__board = [[Mark.WHITE for x in range(num_columns)] for x in range(num_rows)]
+
+    def mark(self, row, column):
+        if row > self.num_rows or column > self.num_columns or self.num_rows < 0 or self.num_columns < 0:
+            raise IndexError
+
+        if self.__board[row][column] is Mark.WHITE:
+            self.__board[row][column] = Mark.BLACK
+        else:
+            raise AlreadyMarkedError(f"The square in row {row} and column {column} is already marked")
+
+    def print(self):
+        for row in self.__board:
+            for s in row:
+                if s is Mark.WHITE:
+                    print(" ", end='')
+                elif s is Mark.BLACK:
+                    print("*", end='')
+        print('\n')
