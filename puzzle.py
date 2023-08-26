@@ -26,6 +26,8 @@ class Puzzle:
         if row > self.num_rows or column > self.num_columns or row <= 0 or column <= 0:
             raise IndexError
 
+        row -= 1
+        column -= 1
         if self.__board[row][column] is Mark.WHITE:
             self.__board[row][column] = Mark.BLACK
         else:
@@ -38,3 +40,13 @@ class Puzzle:
                 ret += str(s.value)
             ret += '\n'
         return ret
+
+
+if __name__ == '__main__':
+    new_puzzle = Puzzle([1, 2, 3, 4], [1, 2, 3, 4])
+    new_puzzle.mark(3, 3)
+    b = str(new_puzzle)
+    a = "0000\n0000\n0010\n0000"
+    print(b)
+    print('')
+    print(a)

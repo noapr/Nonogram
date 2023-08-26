@@ -25,3 +25,8 @@ class TestPuzzle(unittest.TestCase):
         new_puzzle.mark(3, 3)
         with self.assertRaises(AlreadyMarkedError):
             new_puzzle.mark(3, 3)
+
+    def test_mark(self):
+        new_puzzle = Puzzle([1, 2, 3, 4], [1, 2, 3, 4])
+        new_puzzle.mark(3, 3)
+        self.assertEqual(str(new_puzzle), "0000\n0000\n0010\n0000\n")
