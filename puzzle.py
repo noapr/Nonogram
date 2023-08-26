@@ -9,12 +9,17 @@ class Mark(Enum):
 
 
 class Puzzle:
-    def __init__(self, num_rows, num_columns):
+    def __init__(self, rows, columns):
+
+        num_rows = len(rows)
+        num_columns = len(columns)
         if num_rows <= 0 or num_columns <= 0:
             raise IndexError
 
         self.num_rows = num_rows
         self.num_columns = num_columns
+        self.rows = rows
+        self.columns = columns
         self.__board = [[Mark.WHITE for x in range(num_columns)] for x in range(num_rows)]
 
     def mark(self, row, column):
