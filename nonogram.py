@@ -8,7 +8,7 @@ class Mark(Enum):
     WHITE = 0
 
 
-class Puzzle:
+class Nonogram:
     def __init__(self, rows, columns):
 
         num_rows = len(rows)
@@ -40,13 +40,3 @@ class Puzzle:
                 ret += str(s.value)
             ret += '\n'
         return ret
-
-
-if __name__ == '__main__':
-    new_puzzle = Puzzle([1, 2, 3, 4], [1, 2, 3, 4])
-    new_puzzle.mark(3, 3)
-    b = str(new_puzzle)
-    a = "0000\n0000\n0010\n0000"
-    print(b)
-    print('')
-    print(a)
