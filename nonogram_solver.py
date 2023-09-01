@@ -37,7 +37,6 @@ class NonogramSolver:
 
             self.__solved = self.__is_solved()
 
-
     def __remove_not_suitable_possibilities(self):
         for i in range(self.nonogram.num_rows):
             for j in range(self.nonogram.num_columns):
@@ -116,30 +115,3 @@ class NonogramSolver:
                     return False
                 flag = True
         return True
-
-
-if __name__ == '__main__':
-    new_puzzle = Nonogram(
-        rows=[[5], [6], [4, 1, 4], [3, 2, 6], [3, 1, 1, 2, 3], [2, 1, 1, 1, 3], [3, 2, 1, 2], [3, 1, 1, 2], [2, 3, 5], [7, 1, 3], [2, 2, 2, 2], [2, 2, 3], [3, 5, 2], [4, 1],
-              [14]],
-        columns=[[9], [9, 5], [5, 2, 6], [3, 2, 3], [2, 1, 2, 2], [3, 1, 3, 1], [5, 3, 1], [1, 2, 1], [2, 2, 1, 1], [2, 2, 1, 1, 1], [2, 1, 2, 1, 1], [2, 1, 2, 1], [4, 4, 1],
-                 [11, 1], [7, 3]])
-    solver = NonogramSolver(new_puzzle)
-    solver.solve()
-    print(solver.nonogram)
-    print("111110000000000\n"
-                                          "111111000000000\n"
-                                          "111101000011110\n"
-                                          "111001100111111\n"
-                                          "111010101100111\n"
-                                          "110000101010111\n"
-                                          "111001100100011\n"
-                                          "111000100100011\n"
-                                          "110111000011111\n"
-                                          "001111111010111\n"
-                                          "011001101100110\n"
-                                          "011000110001110\n"
-                                          "011100011111011\n"
-                                          "011110000000001\n"
-                                          "011111111111111\n"
-                                          "\n")
