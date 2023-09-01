@@ -24,7 +24,7 @@ class TestNonogram(unittest.TestCase):
         new_puzzle = Nonogram([1, 2, 3, 4], [1, 2, 3, 4])
         new_puzzle.mark(3, 3, Mark.BLACK)
         with self.assertRaises(AlreadyMarkedError):
-            new_puzzle.mark(3, 3, Mark.BLACK)
+            new_puzzle.mark(3, 3, Mark.WHITE)
 
     def test_mark(self):
         new_puzzle = Nonogram([1, 2, 3, 4], [1, 2, 3, 4])
