@@ -23,7 +23,7 @@ class NonogramSolver:
             for i in range(self.nonogram.num_columns):
                 if len(self.__cols_possibilities[i]) == 1:
                     for j in range(self.nonogram.num_rows):
-                        self.nonogram.mark(j + 1, i + 1, self.__rows_possibilities[i][0][j])
+                        self.nonogram.mark(j + 1, i + 1, self.__cols_possibilities[i][0][j])
 
             self.__remove_not_suitable_possibilities()
             if self.__is_running_out_of_possibilities():
@@ -37,18 +37,17 @@ class NonogramSolver:
 
             self.__solved = self.__is_solved()
 
-            print(self.nonogram)
-            print('')
 
     def __remove_not_suitable_possibilities(self):
         for i in range(self.nonogram.num_rows):
             for j in range(self.nonogram.num_columns):
-                self.__rows_possibilities[i] = [perm for perm in self.__rows_possibilities[i] if perm[j] == self.nonogram.get_board()[i][j]]
-                self.__cols_possibilities[j] = [perm for perm in self.__cols_possibilities[j] if perm[i] == self.nonogram.get_board()[i][j]]
+                if self.nonogram.get_board()[i][j] != Mark.EMPTY:
+                    self.__rows_possibilities[i] = [perm for perm in self.__rows_possibilities[i] if perm[j] == self.nonogram.get_board()[i][j]]
+                    self.__cols_possibilities[j] = [perm for perm in self.__cols_possibilities[j] if perm[i] == self.nonogram.get_board()[i][j]]
 
     def __partial_marking(self):
         for i in range(self.nonogram.num_rows):
-            common_marks = self.__rows_possibilities[i][0]
+            common_marks = self.__rows_possibilities[i][0].copy()
             for perm in self.__rows_possibilities[i][1:]:
                 for j in range(self.nonogram.num_columns):
                     if common_marks[j] != perm[j]:
@@ -58,7 +57,7 @@ class NonogramSolver:
                     self.nonogram.mark(i + 1, j + 1, common_marks[j])
 
         for i in range(self.nonogram.num_columns):
-            common_marks = self.__cols_possibilities[i][0]
+            common_marks = self.__cols_possibilities[i][0].copy()
             for perm in self.__cols_possibilities[i][1:]:
                 for j in range(self.nonogram.num_rows):
                     if common_marks[j] != perm[j]:
@@ -128,3 +127,19 @@ if __name__ == '__main__':
     solver = NonogramSolver(new_puzzle)
     solver.solve()
     print(solver.nonogram)
+    print("111110000000000\n"
+                                          "111111000000000\n"
+                                          "111101000011110\n"
+                                          "111001100111111\n"
+                                          "111010101100111\n"
+                                          "110000101010111\n"
+                                          "111001100100011\n"
+                                          "111000100100011\n"
+                                          "110111000011111\n"
+                                          "001111111010111\n"
+                                          "011001101100110\n"
+                                          "011000110001110\n"
+                                          "011100011111011\n"
+                                          "011110000000001\n"
+                                          "011111111111111\n"
+                                          "\n")
