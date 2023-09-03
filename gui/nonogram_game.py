@@ -1,10 +1,14 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QGridLayout
+
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QGridLayout
 from PyQt5.QtCore import Qt
+
+from gui.fireworks import FireworksWidget
 from nonogram_solver import NonogramSolver
-from nonogram import Nonogram, Mark
+from nonogram import Mark
 
 CELL_SIZE = 25
+MARK_TO_COLOR = {Mark.EMPTY: '#d3d3d3', Mark.BLACK: '#000000', Mark.WHITE: '#ffffff'}
 
 
 class NonogramGame(QMainWindow):
@@ -31,6 +35,23 @@ class NonogramGame(QMainWindow):
         self.game_board = QWidget()
         self.game_board.setLayout(game_board_layout)
 
+        # Create and add row number labels
+        max_length = (len(max(self.nonogram.rows, key=lambda x: len(x))))
+        for i in range(self.nonogram.num_rows):
+            row_label = QLabel((str(self.nonogram.rows[i])[1:-1]).replace(',', ''))
+            row_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            row_label.setStyleSheet("background-color: white;")
+            row_label.setFixedSize(15 * max_length, CELL_SIZE)
+            game_board_layout.addWidget(row_label, i + 1, 0)
+
+        # Create and add columns number labels
+        for i in range(self.nonogram.num_columns):
+            column_label = QLabel((str(self.nonogram.columns[i])[1:-1]).replace(', ', '\n'))
+            column_label.setAlignment(Qt.AlignRight | Qt.AlignBottom)
+            column_label.setStyleSheet("background-color: white;")
+            column_label.setFixedSize(CELL_SIZE, 15 * max_length)
+            game_board_layout.addWidget(column_label, 0, i + 1)
+
         # Create and add cells to the game board grid layout
         self.cells = []
         for row in range(self.nonogram.num_rows):
@@ -40,7 +61,8 @@ class NonogramGame(QMainWindow):
                 cell.setFixedSize(CELL_SIZE, CELL_SIZE)
                 cell.clicked.connect(lambda _, r=row, c=col: self.toggle_cell(r, c))
                 cell.setContentsMargins(0, 0, 0, 0)
-                game_board_layout.addWidget(cell, row, col)
+                cell.setStyleSheet("background-color: {};".format(MARK_TO_COLOR[Mark.EMPTY]))
+                game_board_layout.addWidget(cell, row + 1, col + 1)
                 row_cells.append(cell)
             self.cells.append(row_cells)
         self.game_board.setContentsMargins(0, 0, 0, 0)
@@ -50,11 +72,12 @@ class NonogramGame(QMainWindow):
         solve_button = QPushButton('Solve')
         clear_button = QPushButton('Clear')
         solve_button.clicked.connect(self.solve_nonogram)
+        # solve_button.clicked.connect(self.fireworks_animation) # TODO: fix fireworks_animation
         clear_button.clicked.connect(self.clear_board)
         control_layout.addWidget(solve_button)
         control_layout.addWidget(clear_button)
 
-        # Create an input field for puzzle definition
+        # Create a label for puzzle's name
         self.puzzle_name = QLabel(self.nonogram.name)
         self.puzzle_name.setAlignment(Qt.AlignCenter)
         self.puzzle_name.setStyleSheet("font-size: 28px; color: blue;")
@@ -71,9 +94,9 @@ class NonogramGame(QMainWindow):
         central_widget.setLayout(layout)
 
     def toggle_cell(self, row, col):
-        current_text = self.cells[row][col].text()
-        new_text = 'X' if current_text == '' else ''
-        self.cells[row][col].setText(new_text)
+        current_color = (self.cells[row][col].palette().color(self.cells[row][col].backgroundRole())).name()
+        new_color = MARK_TO_COLOR[Mark.BLACK] if current_color in [MARK_TO_COLOR[Mark.EMPTY], MARK_TO_COLOR[Mark.WHITE]] else MARK_TO_COLOR[Mark.WHITE]
+        self.cells[row][col].setStyleSheet("background-color: {new_color};".format(new_color=new_color))
 
     def solve_nonogram(self):
         if self.nonogram is not None:
@@ -87,25 +110,21 @@ class NonogramGame(QMainWindow):
             self.feedback_label.setText('No nonogram selected.')
 
     def clear_board(self):
-        self.puzzle_name.clear()
-        for row in self.cells:
-            for cell in row:
-                cell.setText('')
+        for row in range(self.nonogram.num_rows):
+            for col in range(self.nonogram.num_columns):
+                self.cells[row][col].setStyleSheet("background-color: {};".format(MARK_TO_COLOR[Mark.EMPTY]))
         self.feedback_label.clear()
 
     def display_solution(self):
         for row in range(self.nonogram.num_rows):
             for col in range(self.nonogram.num_columns):
-                if self.nonogram.get_board()[row][col] == Mark.BLACK:
-                    self.cells[row][col].setText('X')
-                elif self.nonogram.get_board()[row][col] == Mark.WHITE:
-                    self.cells[row][col].setText('')
+                mark = self.nonogram.get_board()[row][col]
+                self.cells[row][col].setStyleSheet("background-color: {};".format(MARK_TO_COLOR[mark]))
 
-    @staticmethod
-    def create_nonogram(puzzle_definition):
-        # Implement a method to create a Nonogram from the puzzle_definition string
-        # You can use your nonogram class here
-        pass
+    def fireworks_animation(self):
+        self.fireworks_widget = FireworksWidget(self)
+        self.setCentralWidget(self.fireworks_widget)
+        self.fireworks_widget.start_animation()
 
 
 def main():
