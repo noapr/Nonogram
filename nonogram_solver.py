@@ -115,3 +115,6 @@ class NonogramSolver:
                     return False
                 flag = True
         return True
+
+    def is_solved(self):
+        return self.__solved

@@ -10,7 +10,7 @@ class Mark(Enum):
 
 
 class Nonogram:
-    def __init__(self, rows, columns):
+    def __init__(self, rows, columns, name):
 
         num_rows = len(rows)
         num_columns = len(columns)
@@ -21,6 +21,7 @@ class Nonogram:
         self.num_columns = num_columns
         self.rows = rows
         self.columns = columns
+        self.name = name
         self.__board = [[Mark.EMPTY for x in range(num_columns)] for x in range(num_rows)]
 
     def mark(self, row, column, mark_type):
