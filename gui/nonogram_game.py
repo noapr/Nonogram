@@ -71,11 +71,14 @@ class NonogramGame(QMainWindow):
         control_layout = QHBoxLayout()
         solve_button = QPushButton('Solve')
         clear_button = QPushButton('Clear')
+        check_button = QPushButton('Check')
         solve_button.clicked.connect(self.solve_nonogram)
         # solve_button.clicked.connect(self.fireworks_animation) # TODO: fix fireworks_animation
         clear_button.clicked.connect(self.clear_board)
+        check_button.clicked.connect(self.check_board)
         control_layout.addWidget(solve_button)
         control_layout.addWidget(clear_button)
+        control_layout.addWidget(check_button)
 
         # Create a label for puzzle's name
         self.puzzle_name = QLabel(self.nonogram.name)
@@ -97,17 +100,29 @@ class NonogramGame(QMainWindow):
         current_color = (self.cells[row][col].palette().color(self.cells[row][col].backgroundRole())).name()
         new_color = MARK_TO_COLOR[Mark.BLACK] if current_color in [MARK_TO_COLOR[Mark.EMPTY], MARK_TO_COLOR[Mark.WHITE]] else MARK_TO_COLOR[Mark.WHITE]
         self.cells[row][col].setStyleSheet("background-color: {new_color};".format(new_color=new_color))
+        self.feedback_label.setText('')
 
     def solve_nonogram(self):
         if self.nonogram is not None:
-            self.nonogram_solver.solve()
-            if self.nonogram_solver.is_solved() is not False:
-                self.display_solution()
+            if self.nonogram_solver.is_solved() is False:
+                self.nonogram_solver.solve()
+            self.display_solution()
+            self.feedback_label.setText('')
+
+    def check_board(self):
+        flag = True
+        if self.nonogram is not None:
+            if self.nonogram_solver.is_solved() is False:
+                self.nonogram_solver.solve()
+            for row in range(self.nonogram.num_rows):
+                for col in range(self.nonogram.num_columns):
+                    mark = self.nonogram.get_board()[row][col]
+                    if (self.cells[row][col].palette().color(self.cells[row][col].backgroundRole())).name() != MARK_TO_COLOR[mark]:
+                        flag = False
+            if flag:
                 self.feedback_label.setText('Puzzle solved successfully!')
             else:
-                self.feedback_label.setText('Unable to solve the puzzle.')
-        else:
-            self.feedback_label.setText('No nonogram selected.')
+                self.feedback_label.setText('The board does not match the solution :(')
 
     def clear_board(self):
         for row in range(self.nonogram.num_rows):
