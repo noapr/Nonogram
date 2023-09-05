@@ -1,4 +1,6 @@
 import sys
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QListWidget, QListWidgetItem
 
 from database import DATABASE
@@ -39,29 +41,18 @@ class NonogramSelection(QDialog):
         self.setLayout(layout)
 
     def select_nonogram(self):
+        self.close()
         selected_item = self.nonogram_list.currentItem()
         if selected_item:
             nonogram_name = selected_item.text()
             if nonogram_name in self.nonograms:
                 self.selected_nonogram = self.nonograms[nonogram_name]
-                self.accept()
+                game = NonogramGame(self.selected_nonogram)
+                game.show()
 
 
 def main():
     app = QApplication(sys.argv)
-
-    nonograms = {}
-    for i in range(len(DATABASE)):
-        nonograms[DATABASE[i].get('name')] = Nonogram(rows=DATABASE[i].get('rows'), columns=DATABASE[i].get('columns'), name=DATABASE[i].get('name'))
-
-    nonogram_selection = NonogramSelection(nonograms)
-    if nonogram_selection.exec_() == QDialog.Accepted:
-        selected_nonogram = nonogram_selection.selected_nonogram
-
-        # Create the game window with the selected nonogram
-        game = NonogramGame(selected_nonogram)
-        game.show()
-
     sys.exit(app.exec_())
 
 

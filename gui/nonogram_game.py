@@ -3,7 +3,6 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QGridLayout
 from PyQt5.QtCore import Qt
 
-from gui.fireworks import FireworksWidget
 from nonogram_solver import NonogramSolver
 from nonogram import Mark
 
@@ -73,7 +72,6 @@ class NonogramGame(QMainWindow):
         clear_button = QPushButton('Clear')
         check_button = QPushButton('Check')
         solve_button.clicked.connect(self.solve_nonogram)
-        # solve_button.clicked.connect(self.fireworks_animation) # TODO: fix fireworks_animation
         clear_button.clicked.connect(self.clear_board)
         check_button.clicked.connect(self.check_board)
         control_layout.addWidget(solve_button)
@@ -102,7 +100,7 @@ class NonogramGame(QMainWindow):
         self.cells[row][col].setStyleSheet("background-color: {new_color};".format(new_color=new_color))
         self.feedback_label.setText('')
 
-    def solve_nonogram(self):
+    def solve_nonogram(self): # TODO: run background
         if self.nonogram is not None:
             if self.nonogram_solver.is_solved() is False:
                 self.nonogram_solver.solve()
