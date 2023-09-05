@@ -54,13 +54,17 @@ class NonogramGenerator:
         return lengths
 
     def is_nonogram_solvable(self):
-        rows, columns = self.get_rows_and_columns_nonogram_header()
-        file_name_with_extension = os.path.basename(self.image_path)
-        file_name, file_extension = os.path.splitext(file_name_with_extension)
-        nonogram = Nonogram(rows, columns, file_name)
+        nonogram = self.get_nonogram()
         solver = NonogramSolver(nonogram)
         try:
            solver.solve()
         except CantSolveError:
             return False
         return True
+
+    def get_nonogram(self):
+        rows, columns = self.get_rows_and_columns_nonogram_header()
+        file_name_with_extension = os.path.basename(self.image_path)
+        file_name, file_extension = os.path.splitext(file_name_with_extension)
+        nonogram = Nonogram(rows, columns, file_name)
+        return nonogram
