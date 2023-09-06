@@ -1,9 +1,5 @@
-import sys
-import os
-from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QMessageBox
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QMessageBox
 from PIL import Image
-
 from gui.nonogram_game import NonogramGame
 from nonogram_generator import NonogramGenerator
 
@@ -92,9 +88,3 @@ class CreateNonogramFromPhotoWindow(QDialog):
                 QMessageBox.warning(self, 'Warning', 'Width and Height must be between 5 and 20.')
         except ValueError:
             QMessageBox.warning(self, 'Warning', 'Width and Height must be integers.')
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = CreateNonogramFromPhotoWindow()
-    window.show()
-    sys.exit(app.exec_())

@@ -1,8 +1,6 @@
 import sys
-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QGridLayout
 from PyQt5.QtCore import Qt
-
 from nonogram_solver import NonogramSolver
 from nonogram import Mark
 
@@ -100,7 +98,7 @@ class NonogramGame(QMainWindow):
         self.cells[row][col].setStyleSheet("background-color: {new_color};".format(new_color=new_color))
         self.feedback_label.setText('')
 
-    def solve_nonogram(self): # TODO: run background
+    def solve_nonogram(self):  # TODO: run background
         if self.nonogram is not None:
             if self.nonogram_solver.is_solved() is False:
                 self.nonogram_solver.solve()
@@ -149,7 +147,3 @@ def main():
     game.show()
 
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()

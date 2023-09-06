@@ -57,7 +57,7 @@ class NonogramGenerator:
         nonogram = self.get_nonogram()
         solver = NonogramSolver(nonogram)
         try:
-           solver.solve()
+            solver.solve()
         except CantSolveError:
             return False
         return True

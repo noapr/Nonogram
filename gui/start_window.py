@@ -1,12 +1,12 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QDialog
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
-
-from database import DATABASE
 from gui.create_nonogram_from_photo import CreateNonogramFromPhotoWindow
 from gui.nonogram_selection import NonogramSelection
 from nonogram import Nonogram
+from database import DATABASE
+
 
 class WelcomeWindow(QMainWindow):
     def __init__(self):
@@ -60,6 +60,7 @@ class WelcomeWindow(QMainWindow):
             nonograms[DATABASE[i].get('name')] = Nonogram(rows=DATABASE[i].get('rows'), columns=DATABASE[i].get('columns'), name=DATABASE[i].get('name'))
         nonogram_selection = NonogramSelection(nonograms)
         nonogram_selection.exec_()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

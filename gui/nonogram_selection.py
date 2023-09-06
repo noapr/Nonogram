@@ -1,11 +1,5 @@
-import sys
-
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QListWidget, QListWidgetItem
-
-from database import DATABASE
-from nonogram import Nonogram
-from nonogram_game import NonogramGame
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QListWidget, QListWidgetItem
+from gui.nonogram_game import NonogramGame
 
 
 class NonogramSelection(QDialog):
@@ -49,12 +43,3 @@ class NonogramSelection(QDialog):
                 self.selected_nonogram = self.nonograms[nonogram_name]
                 game = NonogramGame(self.selected_nonogram)
                 game.show()
-
-
-def main():
-    app = QApplication(sys.argv)
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()
